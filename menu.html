@@ -1,0 +1,551 @@
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>menu</title>
+
+</head>
+
+<body>
+
+<!--Loader start-->
+<div class="loader-wrap" style="display: {{isLoaded}}">
+    <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-purple-only">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+                <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Loader end-->
+
+
+
+</body>
+
+
+<!--Menu template start-->
+<template name="top_box">
+
+{{#if currentUser}}
+        <div class='menu_wrap z-depth-1 row'>
+
+            <nav>
+                <div class="nav-wrapper row">
+
+                    <a class="col btn-floating waves-effect btn-large waves-light btn back link "><i
+                            class="mdi-navigation-arrow-back"></i> </a>
+<span class=" center heading col s8 hide-on-large-only"><a class="head" href="/"> Cool Menu </a> </span>
+
+                    <a href="#" data-activates="mobile-demo"
+                       class="col right hide-on-large-only m-menu-active waves-effect waves-light btn-large btn-floating"><i
+                            class="mdi-action-toc"></i></a>
+
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="/"><i class="mdi-action-home left small"></i> Home</a></li>
+
+                        <li><a href="/cart"><i class="mdi-action-shopping-cart left"></i>
+
+                            <div class="total"><p class="ptotal">{{total}}</p></div>
+                            Cart</a></li>
+                        <li><a href="/history"><i class="mdi-action-history left small"></i> History</a></li>
+                        <li><a href="/favourites"><i class="mdi-action-favorite left"></i> Favourites</a></li>
+                        <li><a href="/coupons"><i class="mdi-action-wallet-membership left"></i> Coupons </a></li>
+
+                    </ul>
+
+
+                    <ul class="side-nav" id="mobile-demo">
+                        <li><a href="/"><i class="mdi-action-home left small"></i> Home</a></li>
+
+                        <li><a href="/cart"><i class="mdi-action-shopping-cart left"></i>
+
+                            <div class="total"><p class="ptotal">{{total}}</p></div>
+                            Cart</a></li>
+                        <li><a href="/history"><i class="mdi-action-history left small"></i> History</a></li>
+                        <li><a href="/favourites"><i class="mdi-action-favorite left"></i> Favourites</a></li>
+                        <li><a href="/coupons"><i class="mdi-action-wallet-membership left"></i> Coupons </a></li>
+
+                    </ul>
+
+
+                </div>
+            </nav>
+
+
+        </div>
+{{/if}}
+
+
+    <div class="clearfix"></div>
+    <div class="lg-wrap col s12 center">
+
+        {{> loginButtons}}
+
+
+
+    <div class="clearfix"></div>
+
+
+    {{#if currentUser}}
+
+    {{>yield}}
+
+    {{/if}}
+    </div>
+</template>
+<!--Menu template end-->
+
+
+<!--Admin template start-->
+<template name='admin'>
+
+    {{#if currentUser}}
+
+
+        {{#if isInRole 'admin'}}
+            <div class="row a-wrap white-text">
+
+
+                <div class="col s6 llist">
+                    {{#each order_list}}
+                        <div class="l-wrap  s12 col" data-uid="{{_id}}">
+                            <p class="left">By : {{user}}</p>
+
+                            <p class="right">Order-id : {{_id}}</p>
+
+                            <div class="clearfix"></div>
+                            <p>Time : {{at}}</p>
+
+
+                        </div>
+                    {{/each}}
+
+                </div>
+
+                <div class="col s6">
+
+                    {{#each order_list}}
+                        <div class="o-desc-wrap {{_id}} s12 col">
+                            <!--<p class="left">By : {{user}}</p>-->
+                            <!--<p class="right">Order-id : {{_id}}</p>-->
+                            <table >
+                                <thead>
+                                <tr>
+                                    <th data-field="id">Name</th>
+                                    <th data-field="name">Quantity</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {{#each order}}
+
+                                    <tr>
+                                        <td>{{name}}</td>
+                                        <td>{{qty}}</td>
+
+                                    </tr>
+
+
+                                {{/each}}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    {{/each}}
+
+
+                </div>
+
+
+                    <!--{{#each order_list}}-->
+
+                <!--<span>-->
+                <!--<p><div class="left">Order id : {{_id}} </div> <div class="right">By user : {{user}}</div>-->
+                <!--</p>-->
+                <!--<p>{{at}}</p>-->
+                    <!--<p>{{#each order}}-->
+                    <!--<p>Name : {{name}} </p>-->
+                    <!--<p> qty : {{qty}}</p>-->
+
+                        <!--{{/each}}-->
+                <!--</p>-->
+                <!--</span>-->
+
+                <!--<br>-->
+
+                    <!--{{/each}}-->
+
+
+            </div>
+        {{else}}
+            <h2 class="center">Admin area</h2>
+            <h3 class="center">Unauthorised attempt..!!</h3>
+
+
+        {{/if}}
+
+        {{else}}
+        {{>login}}
+
+        {{/if}}
+
+</template>
+<!--Admin Template end-->
+
+
+<!--Login template starts-->
+
+<template name="login">
+
+    <div class="login-wrap row">
+
+
+
+
+        {{#if currentUser}}
+
+            {{#if isInRole 'admin'}}
+                <h2 class="white-text center">Admin panel</h2>
+                {{> admin}}
+            {{else}}
+                {{> homescreen}}
+
+            {{/if}}
+
+
+            {{else}}
+
+
+
+        {{/if}}
+
+    </div>
+
+
+
+
+
+</template>
+
+
+
+
+<!--Home Template start (default)-->
+<template name='homescreen'>
+
+
+    <div class="categ_wrap">
+
+
+        <div class="search_wrap row">
+
+
+            <nav class="col s12 offset-m1 m10 l8 offset-l2">
+                <div class="nav-wrapper">
+                    <form>
+                        <div class="input-field">
+                            <input id="search" type="search" required class="search-query" placeholder="search">
+                            <label for="search"><i class="mdi-action-search"></i></label>
+                            <i class="mdi-navigation-close white-text"></i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+
+        </div>
+
+
+        <h3 class="center white-text">Categories</h3>
+
+
+        <div class="row">
+
+
+            {{#each cat_var}}
+
+
+                <div class="col s6 m4 l3 center">
+                    <div class="card">
+                        <a href="/dish/{{_id}}" class="link">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <!--<img class="activator"  src="/F-05-FOOD-PHOTOGRAPHY-ZACK-BURRIS-CHICAGO-CHOCOLATE-BOWL-MOUSSE.jpg">-->
+
+                                <img class="activator"  src="{{image_path}}">
+
+
+                            </div>
+                        </a>
+
+                        <div class="card-content center activator">
+                            <span class="card-title activator grey-text text-darken-4 center">{{name}}<i
+                                    class="mdi-navigation-more-vert right"></i></span>
+
+                        </div>
+                        <div class="card-reveal">
+                            <span class="card-title grey-text text-darken-4">{{name}}<i
+                                    class="mdi-navigation-close right"></i></span>
+
+                            <p>Here is some more information about this product that is only revealed once clicked
+                                on.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            {{/each}}
+        </div>
+    </div>
+
+
+
+
+</template>
+<!--Home template end-->
+
+
+<!--Dishes template start-->
+<template name="dishscreen">
+
+
+    <div class="row dish-wrap">
+
+        <div class="search_wrap row">
+            <nav class="col s12 offset-m1 m10 l8 offset-l2">
+                <div class="nav-wrapper">
+                    <form>
+                        <div class="input-field">
+                            <input id="search" type="search" required class="search-query" placeholder="search">
+                            <label for="search"><i class="mdi-action-search"></i></label>
+                            <i class="mdi-navigation-close white-text"></i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+
+        </div>
+
+        {{#each categ_name}}
+            <h3 class="center white-text" style="padding-bottom: 20px">{{name}}</h3>
+        {{/each}}
+
+        {{#each dishes_by_cat}}
+
+
+            <div class="col s12 l6 ">
+
+                <div class="c_wrap z-depth-1" id="{{_id}}">
+
+                    <div class="upper">
+
+                        <div class=" col s3">
+                            <!--<img src="/F-05-FOOD-PHOTOGRAPHY-ZACK-BURRIS-CHICAGO-CHOCOLATE-BOWL-MOUSSE.jpg"-->
+                            <img src="/{{img}}"
+
+
+                                 class=" dish-image responsive-img">
+                        </div>
+
+                        <div class="col s6">
+                            <div class="clearfix">
+                                  <span class="d_name"><h5 class="left">{{name}}</h5>
+
+                                     <div class="right">
+                                         <div class="chilly left"></div>
+                                         <p class="left">Price: {{price}}</p>
+                                     </div>
+
+                                  </span>
+                            </div>
+
+                            <div class="clearfix">
+                    <span>
+                            <p class="left">Taste : cool</p>
+
+                        <div class="right">
+
+                            <p class="left sales"> Total Sales: 1298 </p>
+
+                            <p class="left rating">Rating :</p>
+                        </div>
+
+
+                    </span>
+
+                            </div>
+
+                            <div class="col s12 center desc-trigger">
+                                <div class="trigger-wrap center ">
+                                    <div class="d1"></div>
+                                    <div class="d1"></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col s3 center">
+
+                            <p>Add to cart</p>
+                            <span class="center">
+
+                                          <a class="btn-floating minus-cart center {{_id}} purple darken-3 waves-effect waves-light"
+                                             data-uid="{{_id}}"><i
+                                                  class="mdi-content-remove"> </i></a>
+
+                            <a class="btn-floating add-cart  purple darken-3 waves-effect waves-light"
+                               data-uid="{{_id}}"><i
+                                    class="mdi-action-add-shopping-cart"> </i>
+
+                                <div class="count {{_id}}"><p class="pcount {{_id}}"></p></div>
+                            </a>
+
+
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="lower">
+
+                        <div class="extension col s12 {{_id}}">
+                            <div class="desc-wrap">
+                                <p><b>Description</b> :  {{desc}}</p>
+
+
+                            </div>
+                            <div class="rev-wrap">
+                                {{> review}}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        {{/each}}
+
+        <div class="center">
+            <a class="btn-floating link btn-large waves-effect waves-light addmore purple darken-3 center"><i
+                    class="mdi-content-add"></i></a>
+
+        </div>
+
+    </div>
+
+
+</template>
+<!--Dishes template stop-->
+
+<!--Reviews template start-->
+<template name="review">
+    <h5 class="center">Reviews</h5>
+    {{#each rev}}
+
+        <p><span></span></p>
+
+        <p class="left">Review : {{r}}  </p>
+
+        <p class="right">by {{user_id}}</p>
+
+        <div class="clearfix"></div>
+    {{/each}}
+
+
+</template>
+<!--reviews template end-->
+
+
+<!--Cart template starts-->
+
+<template name="cart">
+
+
+    <div class="row cart-wrap">
+
+        <div class="col z-depth-1 l8 offset-l2 m10 offset-m1 s12 cart-col">
+
+            <h3 class="center white-text">Cart</h3>
+
+            <div class="btn-wrap">
+                <a class="waves-effect waves-light btn-flat white-text left amd" href="/">Add more dishes</a>
+                <a class="waves-effect waves-light btn-flat white-text right co">Confirm order</a>
+            </div>
+            <div class="clearfix">
+
+            </div>
+
+            <div class="cart-inner">
+                <h5 class="white-text center order_heading">Order placed successfully</h5>
+
+                <table class="centered cart_desc">
+                    <thead>
+                    <tr>
+                        <th data-field="id">Name</th>
+                        <th data-field="name">Qty</th>
+                        <th data-field="price">Price per/item</th>
+                        <th data-field="price">Total</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {{#each item}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>
+                                <a class="btn-floating minus-cartpage center left {{id}} purple darken-3 waves-effect waves-light"
+                                   data-uid="{{id}}"><i
+                                        class="mdi-content-remove"> </i></a>
+                                {{qty}}
+                                <a class="btn-floating add-cartpage right {{id}}  purple darken-3 waves-effect waves-light"
+                                   data-uid="{{id}}"><i
+                                        class="mdi-content-add"> </i></a></td>
+                            <td>{{price}}</td>
+                            <td>{{total_price}}</td>
+
+                        </tr>
+                    {{/each}}
+
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><p>Total price </p></td>
+                        <td><p>Rs: {{o_total}}</p></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</template>
+<!--Cart template ends-->
+
